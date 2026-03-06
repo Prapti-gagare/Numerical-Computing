@@ -1,47 +1,35 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
-#include <iostream>
 #include <vector>
-#include <stdexcept>
+#include <iostream>
 #include <fstream>
-#include <cmath>
 
 using namespace std;
 
 class Matrix
 {
-public:
+protected:
     int rows, cols;
     vector<vector<double>> mat;
 
-    Matrix();
+public:
+    Matrix(); 
     Matrix(int rows, int cols);
     Matrix(const Matrix &m);
 
     void readFromFile(ifstream &fin);
     void displayToFile(ofstream &fout) const;
 
-    Matrix add(const Matrix &m) const;
-    Matrix subtract(const Matrix &m) const;
+    Matrix operator+(const Matrix &m) const;
+    Matrix operator-(const Matrix &m) const;
+    Matrix operator*(const Matrix &m) const;
 
-    void gaussianEliminationWithPivoting(ofstream &fout);
-    void generateAugmentedMatrixFile(const string &leftFile, const string &rightFile,const string &outputFile);
-};
+    double &operator()(int i, int j);
+    double operator()(int i, int j) const;
 
-class LinearSystem
-{
-public:
-    Matrix A;
-    LinearSystem(const Matrix &mat);
-    virtual void solve(ofstream &fout) = 0;
-};
-
-class GaussianElimination : public LinearSystem
-{
-public:
-    GaussianElimination(const Matrix &mat);
-    void solve(ofstream &fout);
+    friend istream &operator>>(istream &in, Matrix &m);
+    friend ostream &operator<<(ostream &out, const Matrix &m);
 };
 
 #endif

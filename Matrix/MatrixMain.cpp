@@ -1,72 +1,108 @@
 #include "matrix.hpp"
+#include "gaussian.hpp"
+#include "crouts.hpp"
+#include "dolittle.hpp"
+#include "cholsky.hpp"
+
 #include <fstream>
 #include <iostream>
+
 using namespace std;
 
 int main()
 {
+    string leftFile, rightFile, augFile;
+    int choice, luChoice;
+
+    cout << "Enter left matrix file: ";
+    cin >> leftFile;
+
+    cout << "Enter right matrix file: ";
+    cin >> rightFile;
+
+    cout << "Enter augmented output file: ";
+    cin >> augFile;
+
     try
     {
-        string leftFile, rightFile, augFile;
-        cout << "Enter left matrix file (coefficients): ";
-         cin >> leftFile;
-        cout << "Enter right matrix file (constants): ";
-         cin >> rightFile;
-        cout << "Enter output file for augmented matrix: ";
-         cin >> augFile;
+        
 
-        Matrix tmp;
-        tmp.generateAugmentedMatrixFile(leftFile, rightFile, augFile);
+        Matrix dummy;
+        GaussianElimination temp(dummy);
+        LinearSystem &sys = temp;
 
-        ifstream finAug(augFile);
+        sys.generateAugmentedMatrixFile(leftFile, rightFile, augFile);
+
+    
+
+        ifstream fin(augFile);
         ofstream fout("result.txt");
-        if(!finAug || !fout) throw runtime_error("File opening error.");
 
-        int r,c; finAug >> r >> c;
-        Matrix A(r,c); A.readFromFile(finAug);
+        int r, c;
+        fin >> r >> c;
 
-        fout << "\nSolution vector:\n";
-        GaussianElimination gauss(A);
-        gauss.solve(fout);           
-        ifstream finL(leftFile); 
-        ifstream finR(rightFile);
-        int rL,cL,rR,cR; finL >> rL >> cL; finR >> rR >> cR;
-        Matrix L(rL,cL), R(rR,cR);
-         L.readFromFile(finL);
-          R.readFromFile(finR);
+        Matrix A(r, c);
+        A.readFromFile(fin);
 
-        try
-         { 
-            Matrix sum = L.add(R);
-             fout << "\nAddition of matrices:\n"; 
-            sum.displayToFile(fout);
-         }
-        catch (const exception &e) 
+        cout << "\nChoose method:\n";
+        cout << "1. Gaussian Elimination\n";
+        cout << "2. LU Decomposition\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        LinearSystem *solver = nullptr;
+
+
+        GaussianElimination gaussian(A);
+        CroutLU crout(A);
+        DolittleLU dolittle(A);
+        CholeskyDecomposition chol(A);
+
+        if (choice == 1)
         {
-             fout << "\nAddition Error: " << e.what() << "\n";
-         }
-
-        try
-         { 
-            Matrix diff = L.subtract(R);
-             fout << "\nSubtraction of matrices:\n"; 
-             diff.displayToFile(fout); 
-            }
-        catch (const exception &e)
-         {
-             fout << "\nSubtraction Error: " << e.what() << "\n";
-             }
-
-        finAug.close(); 
-        finL.close();
-         finR.close();
-          fout.close();
-        cout << "Results saved to result.txt\n";
-    }
-    catch(exception &e)
-     {
-         cout << "Error: " << e.what() << endl; 
+            solver = &gaussian;
         }
+
+
+        else if (choice == 2)
+        {
+            cout << "\nChoose LU Method:\n";
+            cout << "1. Crout\n";
+            cout << "2. Doolittle\n";
+            cout << "3. Cholesky\n";
+            cout << "Enter choice: ";
+            cin >> luChoice;
+
+            if (luChoice == 1)
+                solver = &crout;
+
+            else if (luChoice == 2)
+                solver = &dolittle;
+
+            else if (luChoice == 3)
+                solver = &chol;
+
+            else
+            {
+                cout << "Invalid LU choice\n";
+                return 0;
+            }
+        }
+        else
+        {
+            cout << "Invalid choice\n";
+            return 0;
+        }
+
+
+        solver->solve(fout);
+
+        cout << "\nResult saved in result.txt\n";
+    }
+    catch (exception &e)
+    {
+        cout << "Error: " << e.what() << endl;
+    }
 
     return 0;
 }
