@@ -11,12 +11,7 @@ public:
     LinearSystem(const Matrix &m);
 
     virtual void solve(std::ofstream &fout) = 0;
-
-    // Augmented matrix function
-    void generateAugmentedMatrixFile(
-        const string &leftFile,
-        const string &rightFile,
-        const string &outputFile
+    void generateAugmentedMatrixFile(const string &leftFile,const string &rightFile,const string &outputFile
     );
 };
 

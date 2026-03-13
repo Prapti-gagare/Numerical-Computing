@@ -1,35 +1,57 @@
 CC = g++
 CFLAGS = -Wall -std=c++17 -IInclude
+PICFLAGS = -fPIC
 
-# Header dependencies
 DEPS = Include/matrix.hpp \
        Include/LinearSystem.hpp \
        Include/gaussian.hpp \
        Include/lu.hpp \
-	   Include/crouts.hpp \
+       Include/crouts.hpp \
        Include/dolittle.hpp \
        Include/cholsky.hpp
 
-# Object files
-OBJ = MatrixMain.o \
-      src/matrix.o \
-      src/Linear_system.o \
-      src/gaussian.o \
-      src/lu.o \
-	  src/crouts.o \
-	  src/dolittle.o \
-      src/cholsky.o
+SRC = src/matrix.cpp \
+      src/Linear_system.cpp \
+      src/gaussian.cpp \
+      src/lu.cpp \
+      src/crouts.cpp \
+      src/dolittle.cpp \
+      src/cholsky.cpp
 
+OBJ = $(SRC:.cpp=.o)
+
+LIB_STATIC = libmat.a
+LIB_SHARED = libmat.so
 TARGET = matrix_solver
 
-# Rule to compile any .cpp into .o
+# Compile rule
 %.o: %.cpp $(DEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-# Link all object files
-$(TARGET): $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+# Compile rule for shared objects
+%.pic.o: %.cpp $(DEPS)
+	$(CC) -c $< -o $@ $(CFLAGS) $(PICFLAGS)
 
-# Clean rule
+# Static library
+static: $(OBJ)
+	ar rcs $(LIB_STATIC) $(OBJ)
+	$(CC) MatrixMain.cpp -L. -lmat -IInclude -std=c++17 -o $(TARGET)
+
+# Shared library objects
+PICOBJ = $(SRC:.cpp=.pic.o)
+
+# Shared library
+shared: $(PICOBJ)
+	$(CC) -shared -o $(LIB_SHARED) $(PICOBJ)
+	$(CC) MatrixMain.cpp -L. -lmat -IInclude -std=c++17 -o $(TARGET)
+
+# Run static
+run_static: static
+	./$(TARGET)
+
+# Run shared
+run_shared: shared
+	LD_LIBRARY_PATH=. ./$(TARGET)
+
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f src/*.o src/*.pic.o $(LIB_STATIC) $(LIB_SHARED) $(TARGET)
