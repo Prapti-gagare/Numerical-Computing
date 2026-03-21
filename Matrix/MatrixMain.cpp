@@ -50,7 +50,7 @@ int main()
             cout << "Is Identity: " << (A.isIdentity() ? "Yes" : "No") << endl;
             cout << "Is Symmetric: " << (A.isSymmetric() ? "Yes" : "No") << endl;
             cout << "Is Diagonal: " << (A.isDiagonal() ? "Yes" : "No") << endl;
-
+            cout << "Determinant: " << A.determinant() << endl;
             cout << "Is Diagonally Dominant: "
                  << (A.isDiagonallyDominant() ? "Yes" : "No") << endl;
 
@@ -103,7 +103,7 @@ int main()
         if (!fin)
             throw runtime_error("Failed to open augmented matrix file");
 
-        ofstream fout("result.txt");
+        ofstream fout("result3.txt");
         if (!fout)
             throw runtime_error("Failed to open result file");
 
