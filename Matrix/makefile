@@ -8,7 +8,10 @@ DEPS = Include/matrix.hpp \
        Include/lu.hpp \
        Include/crouts.hpp \
        Include/dolittle.hpp \
-       Include/cholsky.hpp
+       Include/cholsky.hpp \
+       Include/gauss_jacobi.hpp \
+       Include/gauss_seidle.hpp \
+       Include/iterative_method.hpp
 
 SRC = src/matrix.cpp \
       src/Linear_system.cpp \
@@ -16,7 +19,10 @@ SRC = src/matrix.cpp \
       src/lu.cpp \
       src/crouts.cpp \
       src/dolittle.cpp \
-      src/cholsky.cpp
+      src/cholsky.cpp \
+      src/gauss_jacobi.cpp \
+      src/gauss_seidle.cpp \
+      src/iterative_method.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

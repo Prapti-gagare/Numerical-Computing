@@ -1,4 +1,6 @@
-x1 = 2.57143
-x2 = -1.73661
-x3 = 2.0697
-x4 = 0.246864
+Matrix is not diagonally dominant. Converting...
+Converged in 12 iterations
+Solution:
+x1 = 3
+x2 = 2
+x3 = 1

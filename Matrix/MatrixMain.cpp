@@ -3,6 +3,8 @@
 #include "crouts.hpp"
 #include "dolittle.hpp"
 #include "cholsky.hpp"
+#include "gauss_jacobi.hpp"
+#include "gauss_seidle.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -12,7 +14,7 @@ using namespace std;
 int main()
 {
     string leftFile, rightFile, augFile;
-    int choice, luChoice;
+    int choice, luChoice, iterChoice;
 
     cout << "Enter left matrix file: ";
     cin >> leftFile;
@@ -40,7 +42,7 @@ int main()
         cout << "\nLeft Matrix A:\n";
         A << cout;
 
-        cout << "\nMatrix Operations (on A) \n";
+        cout << "\nMatrix Operations (on A)\n";
 
         cout << "Is Square: " << (A.isSquare() ? "Yes" : "No") << endl;
         cout << "Is Null: " << (A.isNull() ? "Yes" : "No") << endl;
@@ -54,7 +56,7 @@ int main()
             cout << "Is Diagonally Dominant: "
                  << (A.isDiagonallyDominant() ? "Yes" : "No") << endl;
 
-            if(!A.isDiagonallyDominant())
+            if (!A.isDiagonallyDominant())
             {
                 try
                 {
@@ -62,9 +64,8 @@ int main()
 
                     cout << "\nDiagonally Dominant Matrix:\n";
                     D << cout;
-                    cout << endl;
                 }
-                catch(const exception &e)
+                catch (const exception &e)
                 {
                     cout << e.what() << endl;
                 }
@@ -76,7 +77,6 @@ int main()
 
                 cout << "\nInverse Matrix:\n";
                 inv << cout;
-                cout << endl;
             }
             catch (const exception &e)
             {
@@ -92,7 +92,8 @@ int main()
 
         cout << "\nTranspose Matrix:\n";
         T << cout;
-        cout << endl;
+
+        // Generate augmented matrix
         Matrix dummy;
         GaussianElimination temp(dummy);
         LinearSystem &sys = temp;
@@ -116,15 +117,24 @@ int main()
         cout << "\nChoose method:\n";
         cout << "1. Gaussian Elimination\n";
         cout << "2. LU Decomposition\n";
+        cout << "3. Iterative Methods\n";
         cout << "Enter choice: ";
         cin >> choice;
 
-        LinearSystem *solver;
+        LinearSystem *solver = nullptr;
 
+        // Create all solvers
         GaussianElimination gaussian(Aug);
         CroutLU crout(Aug);
         DolittleLU dolittle(Aug);
         CholeskyDecomposition chol(Aug);
+
+        // Iterative params (optional)
+        int maxIter = 1000;
+        double tol = 1e-6;
+
+        GaussJacobi jacobi(Aug, maxIter, tol);
+        GaussSeidel seidel(Aug, maxIter, tol);
 
         if (choice == 1)
         {
@@ -151,6 +161,30 @@ int main()
                 return 0;
             }
         }
+        else if (choice == 3)
+        {
+            if (!Aug.isDiagonallyDominant())
+            {
+                cout << "\nWarning: Matrix is not diagonally dominant.\n";
+                cout << "Iterative methods may not converge.\n";
+            }
+
+            cout << "\nChoose Iterative Method:\n";
+            cout << "1. Gauss Jacobi\n";
+            cout << "2. Gauss Seidel\n";
+            cout << "Enter choice: ";
+            cin >> iterChoice;
+
+            if (iterChoice == 1)
+                solver = &jacobi;
+            else if (iterChoice == 2)
+                solver = &seidel;
+            else
+            {
+                cout << "Invalid Iterative choice\n";
+                return 0;
+            }
+        }
         else
         {
             cout << "Invalid choice\n";
@@ -159,7 +193,7 @@ int main()
 
         solver->solve(fout);
 
-        cout << "\nSolution saved in result.txt\n";
+        cout << "\nSolution saved in result3.txt\n";
 
         fin.close();
         fout.close();
