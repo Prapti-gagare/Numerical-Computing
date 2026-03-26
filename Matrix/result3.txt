@@ -1,5 +1,3 @@
-Matrix is not diagonally dominant. Converting...
-Converged in 12 iterations
 Solution:
 x1 = 3
 x2 = 2

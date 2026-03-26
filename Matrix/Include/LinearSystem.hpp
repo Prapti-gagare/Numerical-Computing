@@ -3,6 +3,10 @@
 
 #include "matrix.hpp"
 #include <fstream>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 class LinearSystem : public Matrix
 {
@@ -10,9 +14,13 @@ public:
     LinearSystem();
     LinearSystem(const Matrix &m);
 
-    virtual void solve(std::ofstream &fout) = 0;
-    void generateAugmentedMatrixFile(const string &leftFile,const string &rightFile,const string &outputFile
-    );
+    virtual void solve(ofstream &fout) = 0; // pure virtual
+
+    // Generate augmented matrix [A|b] from separate files
+    void generateAugmentedMatrixFile(
+        const string &leftFile,
+        const string &rightFile,
+        const string &outputFile);
 };
 
 #endif

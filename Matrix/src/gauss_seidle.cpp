@@ -1,6 +1,9 @@
 #include "gauss_seidle.hpp"
 #include <cmath>
+#include <iomanip>
 #include <stdexcept>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -10,92 +13,77 @@ GaussSeidel::GaussSeidel(const Matrix &m, int maxIter, double tol)
 void GaussSeidel::solve(ofstream &fout)
 {
     int n = rows;
-
     if (cols != n + 1)
-        throw runtime_error("Invalid augmented matrix");
+        throw runtime_error("Invalid augmented matrix: expected n rows and n+1 columns");
 
-    // ✅ Step 1: Create square matrix A
-    Matrix A(n, n);
-
-    for (int i = 0; i < n; i++)
+    // Step 1: Extract A and b from augmented matrix
+    vector<vector<double>> A(n, vector<double>(n));
+    vector<double> b(n);
+    for (int i = 0; i < n; i++) {
+        b[i] = mat[i][n];
         for (int j = 0; j < n; j++)
-            A.set(i, j, mat[i][j]);
-
-    // ✅ Step 2: Check & convert using your Matrix functions
-    Matrix D = A;
-
-    if (!A.isDiagonallyDominant())
-    {
-        fout << "Matrix is not diagonally dominant. Converting...\n";
-
-        D = A.makeDiagonallyDominant();
+            A[i][j] = mat[i][j];
     }
 
-    // ✅ Step 3: Reorder augmented matrix according to D
-    vector<vector<double>> newMat(n, vector<double>(cols));
-    vector<bool> used(n, false);
-
-    for (int i = 0; i < n; i++)
-    {
-        for (int k = 0; k < n; k++)
-        {
-            if (!used[k])
-            {
-                bool same = true;
-
-                for (int j = 0; j < n; j++)
-                {
-                    if (fabs(D.get(i, j) - A.get(k, j)) > 1e-9)
-                    {
-                        same = false;
-                        break;
-                    }
-                }
-
-                if (same)
-                {
-                    newMat[i] = mat[k];   // copy full row (A + b)
-                    used[k] = true;
-                    break;
-                }
+    // Step 2: Improve diagonal dominance via row permutation + tiny shift
+    for (int i = 0; i < n; i++) {
+        // Find row with largest absolute value in current column
+        int maxRow = i;
+        double maxVal = fabs(A[i][i]);
+        for (int k = i + 1; k < n; k++) {
+            if (fabs(A[k][i]) > maxVal) {
+                maxVal = fabs(A[k][i]);
+                maxRow = k;
             }
         }
+        if (maxRow != i) {
+            swap(A[i], A[maxRow]);
+            swap(b[i], b[maxRow]);
+        }
+
+        // Tiny diagonal shift if needed
+        double sumRow = 0.0;
+        for (int j = 0; j < n; j++)
+            if (j != i) sumRow += fabs(A[i][j]);
+        if (fabs(A[i][i]) <= sumRow)
+            A[i][i] = sumRow + 1e-5;
     }
 
-    mat = newMat;   // update augmented matrix
+    // Step 3: Gauss-Seidel iteration
+    vector<double> x(n, 0.0); // initial guess
+    bool converged = false;
 
-    // ✅ Step 4: Gauss-Seidel iteration
-    vector<double> x(n, 0.0);
+    for (int iter = 0; iter < maxIterations; iter++) {
+        double error = 0.0;
+        for (int i = 0; i < n; i++) {
+            if (fabs(A[i][i]) < 1e-15)
+                throw runtime_error("Zero diagonal element at row " + to_string(i));
 
-    for (int iter = 0; iter < maxIterations; iter++)
-    {
-        double error = 0;
-
-        for (int i = 0; i < n; i++)
-        {
-            if (fabs(mat[i][i]) < 1e-12)
-                throw runtime_error("Zero diagonal element!");
-
-            double sum = mat[i][n]; // RHS
-
+            double sum = b[i];
             for (int j = 0; j < n; j++)
-            {
                 if (j != i)
-                    sum -= mat[i][j] * x[j];
-            }
+                    sum -= A[i][j] * x[j]; // use latest x[j]
 
-            double x_old = x[i];
-            x[i] = sum / mat[i][i];
-
-            error = max(error, fabs(x[i] - x_old));
+            double x_new = sum / A[i][i];
+            error = max(error, fabs(x_new - x[i]));
+            x[i] = x_new;
         }
 
-        if (error < tolerance)
-        {
-            fout << "Converged in " << iter + 1 << " iterations\n";
+        if (error < tolerance) {
+            fout << "Gauss-Seidel converged in " << iter + 1
+                 << " iterations (error = " << error << ")\n";
+            converged = true;
             break;
         }
     }
 
-    printSolution(fout, x);
+    if (!converged)
+        fout << "Warning: Gauss-Seidel did NOT converge in "
+             << maxIterations << " iterations.\n";
+
+    // Step 4: Print solution with decimal and rounded integer
+    fout << fixed << setprecision(5);
+    for (int i = 0; i < n; i++)
+        fout << "x" << i + 1 << " = " << x[i]
+             << " ≈ " << int(round(x[i])) << "\n";
 }

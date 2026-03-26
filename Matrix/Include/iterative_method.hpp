@@ -10,7 +10,7 @@ using namespace std;
 class IterativeMethod : public LinearSystem
 {
 protected:
-    int maxIterations;
+    int    maxIterations;
     double tolerance;
 
 public:
@@ -18,8 +18,8 @@ public:
 
     virtual void solve(ofstream &fout) = 0;
 
-    vector<double> extractB() const;   // RHS
-    vector<vector<double>> extractA() const; // Coefficient matrix
+    vector<double>              extractB() const;
+    vector<vector<double>>      extractA() const;
 
     void printSolution(ofstream &fout, const vector<double> &x);
 };

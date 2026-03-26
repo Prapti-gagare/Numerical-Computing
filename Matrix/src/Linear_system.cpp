@@ -1,6 +1,7 @@
 #include "LinearSystem.hpp"
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -8,6 +9,7 @@ LinearSystem::LinearSystem() : Matrix() {}
 
 LinearSystem::LinearSystem(const Matrix &m) : Matrix(m) {}
 
+// Combine left matrix and right-hand side into augmented matrix
 void LinearSystem::generateAugmentedMatrixFile(
     const string &leftFile,
     const string &rightFile,
@@ -21,29 +23,32 @@ void LinearSystem::generateAugmentedMatrixFile(
         throw runtime_error("File opening error.");
 
     int rL, cL, rR, cR;
-
     finL >> rL >> cL;
     finR >> rR >> cR;
 
-    if (rL != rR || cR != 1)
-        throw runtime_error("Dimension mismatch.");
+    if (rL != rR)
+        throw runtime_error("Row count mismatch between left and right files.");
+    if (cR != 1)
+        throw runtime_error("Right-hand side file must have exactly 1 column.");
 
-    fout << rL << " " << (cL + 1) << endl;
+    // Write augmented matrix dimensions
+    fout << rL << " " << (cL + 1) << "\n";
 
     for (int i = 0; i < rL; i++)
     {
         for (int j = 0; j < cL; j++)
         {
             double val;
-            finL >> val;
+            if (!(finL >> val))
+                throw runtime_error("Unexpected end of left matrix file at row " + to_string(i));
             fout << val << " ";
         }
 
         double rhs;
-        finR >> rhs;
-
-        fout << rhs << endl;
+        if (!(finR >> rhs))
+            throw runtime_error("Unexpected end of right matrix file at row " + to_string(i));
+        fout << rhs << "\n";
     }
 
-    cout << "Augmented matrix saved to " << outputFile << endl;
+    cout << "Augmented matrix saved to " << outputFile << "\n";
 }
