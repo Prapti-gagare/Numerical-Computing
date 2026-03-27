@@ -16,7 +16,6 @@ void GaussSeidel::solve(ofstream &fout)
     if (cols != n + 1)
         throw runtime_error("Invalid augmented matrix: expected n rows and n+1 columns");
 
-    // Step 1: Extract A and b from augmented matrix
     vector<vector<double>> A(n, vector<double>(n));
     vector<double> b(n);
     for (int i = 0; i < n; i++) {
@@ -25,9 +24,7 @@ void GaussSeidel::solve(ofstream &fout)
             A[i][j] = mat[i][j];
     }
 
-    // Step 2: Improve diagonal dominance via row permutation + tiny shift
     for (int i = 0; i < n; i++) {
-        // Find row with largest absolute value in current column
         int maxRow = i;
         double maxVal = fabs(A[i][i]);
         for (int k = i + 1; k < n; k++) {
@@ -41,7 +38,6 @@ void GaussSeidel::solve(ofstream &fout)
             swap(b[i], b[maxRow]);
         }
 
-        // Tiny diagonal shift if needed
         double sumRow = 0.0;
         for (int j = 0; j < n; j++)
             if (j != i) sumRow += fabs(A[i][j]);
@@ -49,8 +45,7 @@ void GaussSeidel::solve(ofstream &fout)
             A[i][i] = sumRow + 1e-5;
     }
 
-    // Step 3: Gauss-Seidel iteration
-    vector<double> x(n, 0.0); // initial guess
+    vector<double> x(n, 0.0); 
     bool converged = false;
 
     for (int iter = 0; iter < maxIterations; iter++) {
@@ -62,7 +57,7 @@ void GaussSeidel::solve(ofstream &fout)
             double sum = b[i];
             for (int j = 0; j < n; j++)
                 if (j != i)
-                    sum -= A[i][j] * x[j]; // use latest x[j]
+                    sum -= A[i][j] * x[j]; 
 
             double x_new = sum / A[i][i];
             error = max(error, fabs(x_new - x[i]));
@@ -81,7 +76,8 @@ void GaussSeidel::solve(ofstream &fout)
         fout << "Warning: Gauss-Seidel did NOT converge in "
              << maxIterations << " iterations.\n";
 
-    // Step 4: Print solution with decimal and rounded integer
+
+             
     fout << fixed << setprecision(5);
     for (int i = 0; i < n; i++)
         fout << "x" << i + 1 << " = " << x[i]

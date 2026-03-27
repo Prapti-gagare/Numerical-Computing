@@ -1,8 +1,6 @@
 #ifndef GAUSS_SEIDEL_HPP
 #define GAUSS_SEIDEL_HPP
-
 #include "iterative_method.hpp"
-
 class GaussSeidel : public IterativeMethod
 {
 public:

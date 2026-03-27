@@ -1,4 +1,4 @@
-Gauss-Seidel converged in 32 iterations (error = 8.70323e-11)
+Gauss-Jacobi converged in 55 iterations (error = 9.30243e-11)
 x1 = 1.57030 ≈ 2
 x2 = 0.95400 ≈ 1
 x3 = 0.74571 ≈ 1

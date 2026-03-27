@@ -14,9 +14,7 @@ public:
     LinearSystem();
     LinearSystem(const Matrix &m);
 
-    virtual void solve(ofstream &fout) = 0; // pure virtual
-
-    // Generate augmented matrix [A|b] from separate files
+    virtual void solve(ofstream &fout) = 0;
     void generateAugmentedMatrixFile(
         const string &leftFile,
         const string &rightFile,

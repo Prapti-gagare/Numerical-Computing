@@ -3,7 +3,6 @@
 IterativeMethod::IterativeMethod(const Matrix &m, int maxIter, double tol)
     : LinearSystem(m), maxIterations(maxIter), tolerance(tol) {}
 
-// Extract coefficient matrix A (all columns except last)
 vector<vector<double>> IterativeMethod::extractA() const
 {
     vector<vector<double>> A(rows, vector<double>(cols - 1));
@@ -12,8 +11,6 @@ vector<vector<double>> IterativeMethod::extractA() const
             A[i][j] = mat[i][j];
     return A;
 }
-
-// Extract RHS vector b (last column)
 vector<double> IterativeMethod::extractB() const
 {
     vector<double> b(rows);

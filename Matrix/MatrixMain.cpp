@@ -22,7 +22,6 @@ int main()
 
     try
     {
-        // ── Read left matrix A ─────────────────────────────────────────────
         ifstream left(leftFile);
         if (!left) throw runtime_error("Cannot open left matrix file: " + leftFile);
 
@@ -34,16 +33,16 @@ int main()
 
         cout << "\nLeft Matrix A (" << lr << "x" << lc << "):\n" << A;
 
-        // ── Matrix property report ─────────────────────────────────────────
+    
         cout << "\nMatrix Properties:\n";
-        cout << "  Is Square:              " << (A.isSquare()             ? "Yes" : "No") << "\n";
-        cout << "  Is Null:                " << (A.isNull()               ? "Yes" : "No") << "\n";
+        cout << "  Is Square:" << (A.isSquare()? "Yes" : "No") << "\n";
+        cout << "  Is Null:" << (A.isNull() ? "Yes" : "No") << "\n";
 
         if (A.isSquare())
         {
-            cout << "  Is Identity:            " << (A.isIdentity()          ? "Yes" : "No") << "\n";
-            cout << "  Is Symmetric:           " << (A.isSymmetric()         ? "Yes" : "No") << "\n";
-            cout << "  Is Diagonal:            " << (A.isDiagonal()          ? "Yes" : "No") << "\n";
+            cout << "  Is Identity:" << (A.isIdentity()? "Yes" : "No") << "\n";
+            cout << "  Is Symmetric:" << (A.isSymmetric()? "Yes" : "No") << "\n";
+            cout << "  Is Diagonal:" << (A.isDiagonal()? "Yes" : "No") << "\n";
             cout << "  Is Diagonally Dominant: " << (A.isDiagonallyDominant()? "Yes" : "No") << "\n";
 
             if (!A.isDiagonallyDominant())
@@ -60,11 +59,8 @@ int main()
         Matrix T = A.transpose();
         cout << "\nTranspose of A:\n" << T;
 
-        // ── Build augmented matrix [A|b] ───────────────────────────────────
-        GaussSeidel temp(A); // stack object
+        GaussSeidel temp(A); 
         temp.generateAugmentedMatrixFile(leftFile, rightFile, augFile);
-
-        // ── Load augmented matrix ──────────────────────────────────────────
         ifstream fin(augFile);
         if (!fin) throw runtime_error("Cannot open augmented matrix file: " + augFile);
 
@@ -74,7 +70,6 @@ int main()
         Aug.readFromFile(fin);
         fin.close();
 
-        // ── Choose solving method ──────────────────────────────────────────
         int methodChoice;
         cout << "\nChoose Solving Method:\n";
         cout << "  1. Gauss-Jacobi\n";
@@ -86,7 +81,7 @@ int main()
         cout << "Enter choice: ";
         cin >> methodChoice;
 
-        int    maxIter = 10000;
+        int maxIter = 10000;
         double tol     = 1e-10;
 
         ofstream fout("result.txt");
