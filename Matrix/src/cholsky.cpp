@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <stdexcept>
+#include "matrix.hpp"
 
 using namespace std;
 

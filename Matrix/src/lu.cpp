@@ -1,7 +1,8 @@
 #include "lu.hpp"
 #include <vector>
 #include <fstream>
-
+#include "matrix.hpp"
+// ...existing code...
 using namespace std;
 
 LU::LU(const Matrix &m) : LinearSystem(m) {}

@@ -2,7 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
-
+#include "matrix.hpp"
+// ...existing code...
 using namespace std;
 
 LinearSystem::LinearSystem() : Matrix() {}

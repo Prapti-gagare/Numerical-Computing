@@ -3,7 +3,8 @@
 #include <cmath>
 #include <stdexcept>
 #include <fstream>
-
+#include "matrix.hpp"
+// ...existing code...
 GaussianElimination::GaussianElimination(const Matrix &m) : LinearSystem(m) {}
 
 void GaussianElimination::solve(ofstream &fout)

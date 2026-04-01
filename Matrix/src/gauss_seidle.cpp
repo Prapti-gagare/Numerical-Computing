@@ -4,7 +4,8 @@
 #include <stdexcept>
 #include <vector>
 #include <algorithm>
-
+#include "matrix.hpp"
+// ...existing code...
 using namespace std;
 
 GaussSeidel::GaussSeidel(const Matrix &m, int maxIter, double tol)
@@ -44,6 +45,22 @@ void GaussSeidel::solve(ofstream &fout)
         if (fabs(A[i][i]) <= sumRow)
             A[i][i] = sumRow + 1e-5;
     }
+
+    // Print diagonally dominant matrix (A | b)
+    cout << "\n--- Gauss-Seidel: Matrix after making Diagonally Dominant ---\n";
+    fout << "\n--- Gauss-Seidel: Matrix after making Diagonally Dominant ---\n";
+    cout << fixed << setprecision(4);
+    fout << fixed << setprecision(4);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << A[i][j] << "\t";
+            fout << A[i][j] << "\t";
+        }
+        cout << "| " << b[i] << "\n";
+        fout << "| " << b[i] << "\n";
+    }
+    cout << "-------------------------------------------------------------\n\n";
+    fout << "-------------------------------------------------------------\n\n";
 
     vector<double> x(n, 0.0); 
     bool converged = false;

@@ -2,7 +2,8 @@
 #include <vector>
 #include <fstream>
 #include <stdexcept>
-
+#include "matrix.hpp"
+// ...existing code...
 using namespace std;
 
 DolittleLU::DolittleLU(const Matrix &m) : LU(m) {}
