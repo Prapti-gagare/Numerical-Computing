@@ -3,14 +3,12 @@
 #include <iostream>
 #include <stdexcept>
 #include "matrix.hpp"
-// ...existing code...
 using namespace std;
 
 LinearSystem::LinearSystem() : Matrix() {}
 
 LinearSystem::LinearSystem(const Matrix &m) : Matrix(m) {}
 
-// Combine left matrix and right-hand side into augmented matrix
 void LinearSystem::generateAugmentedMatrixFile(
     const string &leftFile,
     const string &rightFile,
@@ -31,8 +29,6 @@ void LinearSystem::generateAugmentedMatrixFile(
         throw runtime_error("Row count mismatch between left and right files.");
     if (cR != 1)
         throw runtime_error("Right-hand side file must have exactly 1 column.");
-
-    // Write augmented matrix dimensions
     fout << rL << " " << (cL + 1) << "\n";
 
     for (int i = 0; i < rL; i++)

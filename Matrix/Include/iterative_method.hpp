@@ -12,7 +12,6 @@ protected:
     double tolerance;
 public:
     IterativeMethod(const Matrix &m, int maxIter = 1000, double tol = 1e-6);
-   //irtual void solve(ofstream &fout) = 0;
     vector<double> extractB() const;
     vector<vector<double>>extractA() const;
 

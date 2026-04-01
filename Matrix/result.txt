@@ -1,12 +1,8 @@
-
-========== Gerschgorin Circle Theorem ==========
 Matrix (4x4):
 10 7 8 7 
 7 5 6 5 
 8 6 10 9 
 7 5 9 10 
-
---- Gerschgorin Disks ---
 D1: center = a[1][1] = 10.0000,  radius r1 = |7.0000| + |8.0000| + |7.0000| = 22.0000
     => D1 = (10.0000 - 22.0000, 10.0000 + 22.0000) = [-12.0000, 32.0000]
 
@@ -19,10 +15,4 @@ D3: center = a[3][3] = 10.0000,  radius r3 = |8.0000| + |6.0000| + |9.0000| = 23
 D4: center = a[4][4] = 10.0000,  radius r4 = |7.0000| + |5.0000| + |9.0000| = 21.0000
     => D4 = (10.0000 - 21.0000, 10.0000 + 21.0000) = [-11.0000, 31.0000]
 
---- Theorem ---
-1) Every disk contains at least one eigenvalue.
-2) Each eigenvalue is located in one of the disks.
-
---- Overall Eigenvalue Bounds ---
 All eigenvalues lie in: [-13.0000, 33.0000]
-=================================================

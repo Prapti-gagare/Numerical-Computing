@@ -1,6 +1,5 @@
 #include "iterative_method.hpp"
 #include "matrix.hpp"
-// ...existing code...
 
 IterativeMethod::IterativeMethod(const Matrix &m, int maxIter, double tol)
     : LinearSystem(m), maxIterations(maxIter), tolerance(tol) {}

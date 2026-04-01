@@ -6,11 +6,8 @@
 #include "matrix.hpp"
 
 using namespace std;
-
-// Constructor
 CholeskyDecomposition::CholeskyDecomposition(const Matrix &m) : LU(m) {}
 
-// Solve function
 void CholeskyDecomposition::solve(ofstream &fout)
 {
     int n = rows;
@@ -20,8 +17,6 @@ void CholeskyDecomposition::solve(ofstream &fout)
         fout << "Cholesky requires square matrix.\n";
         return;
     }
-
-    // Check symmetry
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
             if (mat[i][j] != mat[j][i])
@@ -30,7 +25,6 @@ void CholeskyDecomposition::solve(ofstream &fout)
                 return;
             }
 
-    // Compute L matrix
     vector<vector<double>> L(n, vector<double>(n, 0));
 
     for (int i = 0; i < n; i++)
@@ -58,14 +52,11 @@ void CholeskyDecomposition::solve(ofstream &fout)
         }
     }
 
-    // Forward substitution Ly = b
     vector<double> b(n);
     for (int i = 0; i < n; i++)
         b[i] = mat[i][cols - 1];
 
     vector<double> y = forwardSubstitution(L, b);
-
-    // Backward substitution Ux = y, where U = L^T
     vector<vector<double>> U(n, vector<double>(n, 0));
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)

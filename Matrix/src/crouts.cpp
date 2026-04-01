@@ -14,13 +14,11 @@ void CroutLU::solve(ofstream &fout)
     vector<vector<double>> L(n, vector<double>(n, 0));
     vector<vector<double>> U(n, vector<double>(n, 0));
 
-    // U has 1s on diagonal (Crout's method)
     for (int i = 0; i < n; i++)
         U[i][i] = 1;
 
     for (int j = 0; j < n; j++)
     {
-        // Compute L column
         for (int i = j; i < n; i++)
         {
             double sum = 0;
@@ -29,7 +27,6 @@ void CroutLU::solve(ofstream &fout)
             L[i][j] = mat[i][j] - sum;
         }
 
-        // Compute U row
         for (int i = j + 1; i < n; i++)
         {
             double sum = 0;

@@ -1,9 +1,8 @@
-//#include "matrix.hpp"
+
 #include <stdexcept>
 #include <cmath>
 #include <algorithm>
 #include "matrix.hpp"
-// ...existing code...
 using namespace std;
 
 Matrix::Matrix() : rows(0), cols(0) {}
@@ -36,7 +35,6 @@ void Matrix::writeToFile(ofstream &fout) const
     }
 }
 
-// FIX: free-function friends, correct signature for  cout << A
 ostream& operator<<(ostream &out, const Matrix &m)
 {
     for (int i = 0; i < m.rows; i++) {
@@ -118,17 +116,13 @@ bool Matrix::isDiagonallyDominant() const {
     } return true;
 }
 
-// FIX: Two-phase strategy:
-//  Phase 1 - partial-pivoting row swaps (works when pivoting is sufficient)
-//  Phase 2 - diagonal shift for rows that are STILL not dominant after pivoting
-//             (essential for FEM/large sparse matrices like the 49x49 input)
+
 Matrix Matrix::makeDiagonallyDominant() const
 {
     if (!isSquare()) throw logic_error("Diagonal dominance only defined for square matrices");
     Matrix result = *this;
     int n = rows;
 
-    // Phase 1: row permutation via partial pivoting
     for (int i = 0; i < n; i++) {
         int maxRow = i;
         double maxVal = fabs(result.mat[i][i]);
@@ -137,7 +131,6 @@ Matrix Matrix::makeDiagonallyDominant() const
         if (maxRow != i) swap(result.mat[i], result.mat[maxRow]);
     }
 
-    // Phase 2: diagonal shift for rows still not dominant
     for (int i = 0; i < n; i++) {
         double offSum = 0.0;
         for (int j = 0; j < n; j++) if (j != i) offSum += fabs(result.mat[i][j]);

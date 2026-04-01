@@ -13,20 +13,16 @@ using namespace std;
 
 int main()
 {
-    int topChoice;
-    cout << "\n============================\n";
-    cout << "  Matrix Solver Menu\n";
-    cout << "============================\n";
+    int Choice;
     cout << "1. Solve Linear System\n";
     cout << "2. Gerschgorin Eigenvalue Estimation\n";
     cout << "Enter choice: ";
-    cin >> topChoice;
+    cin >> Choice;
 
     ofstream fout("result.txt");
 
-    if (topChoice == 2)
+    if (Choice == 2)
     {
-        // Gerschgorin - just needs square matrix A
         string matFile;
         cout << "Enter matrix file: ";
         cin >> matFile;
@@ -46,7 +42,6 @@ int main()
         return 0;
     }
 
-    // Linear system solving
     string leftFile, rightFile, augFile;
     cout << "Enter left matrix file (A):  "; cin >> leftFile;
     cout << "Enter right matrix file (b): "; cin >> rightFile;
@@ -96,12 +91,38 @@ int main()
 
         switch (choice)
         {
-            case 1: { GaussJacobi solver(Aug, 10000, 1e-10); solver.solve(fout); break; }
-            case 2: { GaussSeidel solver(Aug, 10000, 1e-10); solver.solve(fout); break; }
-            case 3: { GaussianElimination solver(Aug); solver.solve(fout); break; }
-            case 4: { DolittleLU solver(Aug); solver.solve(fout); break; }
-            case 5: { CroutLU solver(Aug); solver.solve(fout); break; }
-            case 6: { CholeskyDecomposition solver(Aug); solver.solve(fout); break; }
+            case 1: 
+            { 
+                GaussJacobi solver(Aug, 10000, 1e-10);
+                 solver.solve(fout); break;
+         }
+            case 2:
+             { 
+                GaussSeidel solver(Aug, 10000, 1e-10);
+                 solver.solve(fout); break;
+         }
+            case 3: 
+            { GaussianElimination solver(Aug); 
+                solver.solve(fout); 
+                break;
+         }
+            case 4: 
+            {
+                 DolittleLU solver(Aug);
+                  solver.solve(fout); 
+                  break;
+            }
+            case 5:
+             { 
+                CroutLU solver(Aug); 
+                solver.solve(fout);
+                 break;
+         }
+            case 6:
+             { 
+                CholeskyDecomposition solver(Aug); solver.solve(fout);
+                 break;
+             }
             default: cout << "Invalid choice\n";
         }
         fout.close();
