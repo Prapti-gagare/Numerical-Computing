@@ -17,7 +17,7 @@ public:
     virtual void printEigenvalues(ofstream &fout) = 0;
 
 protected:
-    void assertSquare() const;
+    void Square() const;
 };
 
 #endif

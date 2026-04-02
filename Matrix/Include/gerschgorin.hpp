@@ -13,7 +13,7 @@ class Gerschgorin : public EigenValue
 public:
     Gerschgorin(const Matrix &m);
     vector<pair<double, double>> computeDisks();
-    vector<pair<double, double>> estimateEigenvalues() override;
+    vector<pair<double, double>> estimateEigenvalues();
     void printEigenvalues(ofstream &fout) override;
     pair<double, double> globalBounds();
 };

@@ -7,7 +7,7 @@ using namespace std;
 Gerschgorin::Gerschgorin(const Matrix &m) : EigenValue(m) {}
 vector<pair<double, double>> Gerschgorin::computeDisks()
 {
-    assertSquare();
+    Square();
     int n = rows;
     vector<pair<double, double>> disks(n); 
 
@@ -58,7 +58,7 @@ pair<double, double> Gerschgorin::globalBounds()
 
 void Gerschgorin::printEigenvalues(ofstream &fout)
 {
-    assertSquare();
+    Square();
     int n = rows;
 
     auto disks     = computeDisks();
