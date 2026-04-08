@@ -13,7 +13,9 @@ DEPS = Include/matrix.hpp \
        Include/gauss_seidle.hpp \
        Include/iterative_method.hpp \
        Include/Eigenvalue.hpp \
-      Include/gerschgorin.hpp 
+       Include/gerschgorin.hpp \
+       Include/interpolation.hpp \
+       Include/lagrange.hpp
 SRC = src/matrix.cpp \
       src/Linear_system.cpp \
       src/gaussian.cpp \
@@ -25,7 +27,9 @@ SRC = src/matrix.cpp \
       src/gauss_seidle.cpp \
       src/iterative_method.cpp \
       src/Eigenvalue.cpp \
-      src/gerschgorin.cpp
+      src/gerschgorin.cpp \
+      src/interpolation.cpp \
+      src/lagrange.cpp
 
 OBJ    = $(SRC:.cpp=.o)
 PICOBJ = $(SRC:.cpp=.pic.o)
