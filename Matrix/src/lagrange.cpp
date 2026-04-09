@@ -77,10 +77,7 @@ double Lagrange::interpolate(double xQuery, ofstream &fout)
 {
     validateDataPoints();
     int n = rows;
-
-    fout << "========================================\n";
     fout << "       Lagrange Interpolation\n";
-    fout << "========================================\n";
     fout << "Query point: x = " << xQuery << "\n\n";
 
     printDataPoints(fout);
