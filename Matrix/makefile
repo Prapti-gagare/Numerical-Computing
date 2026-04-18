@@ -15,7 +15,9 @@ DEPS = Include/matrix.hpp \
        Include/Eigenvalue.hpp \
        Include/gerschgorin.hpp \
        Include/interpolation.hpp \
-       Include/lagrange.hpp
+       Include/lagrange.hpp \
+       Include/curvefitting.hpp \
+       Include/leastsquare.hpp
 SRC = src/matrix.cpp \
       src/Linear_system.cpp \
       src/gaussian.cpp \
@@ -29,7 +31,9 @@ SRC = src/matrix.cpp \
       src/Eigenvalue.cpp \
       src/gerschgorin.cpp \
       src/interpolation.cpp \
-      src/lagrange.cpp
+      src/lagrange.cpp \
+      src/curvefitting.cpp \
+      src/leastsquare.cpp
 
 OBJ    = $(SRC:.cpp=.o)
 PICOBJ = $(SRC:.cpp=.pic.o)

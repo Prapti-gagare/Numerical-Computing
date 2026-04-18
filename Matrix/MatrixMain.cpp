@@ -8,13 +8,17 @@
 #include "cholsky.hpp"
 #include "gerschgorin.hpp"
 #include "interpolation.hpp"   
-#include "lagrange.hpp"        
+#include "lagrange.hpp"
+#include "curvefitting.hpp"
+#include "leastsquare.hpp"
 #include <fstream>
 #include <iostream>
+#include <vector>
 using namespace std;
 void solveLinearSystem(ofstream &fout);
 void eigenvalueMenu(ofstream &fout);
 void interpolationMenu(ofstream &fout);
+void curveFittingMenu(ofstream &fout);
 int main()
 {
     int Choice;
@@ -22,6 +26,7 @@ int main()
 cout << "1. Solve Linear System\n";
 cout << "2. Eigenvalue Estimation\n";
 cout << "3. Interpolation\n";
+cout << "4. Curve Fitting\n";
     cout << "Enter choice: ";
     cin >> Choice;
 
@@ -34,7 +39,8 @@ cout << "3. Interpolation\n";
         {
             case 1: solveLinearSystem(fout); break;
             case 2: eigenvalueMenu(fout);    break;
-            case 3: interpolationMenu(fout); break;  
+            case 3: interpolationMenu(fout); break;
+            case 4: curveFittingMenu(fout); break;
             default: cout << "Invalid choice.\n";
         }
     }
@@ -199,4 +205,61 @@ void interpolationMenu(ofstream &fout)
         default:
             cout << "Invalid choice\n";
     }
+}
+
+void curveFittingMenu(ofstream &fout)
+{
+    string dataFile;
+    cout << "Enter data file (x y pairs): ";
+    cin >> dataFile;
+
+    ifstream fin(dataFile);
+    if (!fin) throw runtime_error("Cannot open data file");
+
+    vector<double> x, y;
+    double xi, yi;
+    while (fin >> xi >> yi) {
+        x.push_back(xi);
+        y.push_back(yi);
+    }
+    fin.close();
+
+    if (x.empty()) {
+        cout << "No data points found.\n";
+        return;
+    }
+
+    int degree;
+    cout << "Enter polynomial degree: ";
+    cin >> degree;
+
+    if (degree < 0 || degree >= (int)x.size()) {
+        cout << "Invalid degree.\n";
+        return;
+    }
+
+    LeastSquare ls;
+    ls.setData(x, y);
+    Matrix coeffs = ls.fit(degree);
+
+    cout << "Fitted polynomial coefficients (a0 + a1*x + ... + an*x^n):\n";
+    for(int i = 0; i <= degree; i++){
+        cout << "a" << i << " = " << coeffs.get(i, 0) << "\n";
+    }
+
+    double rmse = ls.computeRMSE(coeffs);
+    cout << "Root Mean Square Error: " << rmse << "\n";
+
+    fout << "Curve Fitting Results:\n";
+    fout << "Data points:\n";
+    for(size_t i = 0; i < x.size(); i++){
+        fout << "(" << x[i] << ", " << y[i] << ")\n";
+    }
+    fout << "Polynomial degree: " << degree << "\n";
+    fout << "Coefficients:\n";
+    for(int i = 0; i <= degree; i++){
+        fout << "a" << i << " = " << coeffs.get(i, 0) << "\n";
+    }
+    ls.outputTable(fout, coeffs);
+    fout << "Root Mean Square Error: " << rmse << "\n";
 }
