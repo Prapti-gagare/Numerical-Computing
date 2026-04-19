@@ -1,21 +1,9 @@
-Curve Fitting Results:
-Data points:
-(-2, 1)
-(-1, 2)
-(0, 3)
-(1, 3)
-(2, 4)
-Polynomial degree: 1
-Coefficients:
-a0 = 2.6
-a1 = 0.7
 
-Least Squares Table:
-x		y		x^2		xy		fi=ax+b		(fi-y)^2
--2		1		4		-2		1.2		0.04
--1		2		1		-2		1.9		0.01
-0		3		0		0		2.6		0.16
-1		3		1		3		3.3		0.09
-2		4		4		8		4		0
-Sums:			10		7				0.3
-Root Mean Square Error: 0.244949
+Matrix after making Diagonally Dominant:
+4.0000	1.0000	-1.0000	| 13.0000
+1.0000	-5.0000	-1.0000	| -8.0000
+2.0000	-1.0000	-6.0000	| -2.0000
+Gauss-Jacobi converged in 20 iterations (error = 0.0000)
+x1 = 3.00000 ≈ 3
+x2 = 2.00000 ≈ 2
+x3 = 1.00000 ≈ 1
