@@ -4,7 +4,6 @@ CurveFitting::CurveFitting() : Matrix() {}
 
 void CurveFitting::setData(const std::vector<double>& x, const std::vector<double>& y) {
     if (x.size() != y.size() || x.empty()) {
-        // Handle error, perhaps set to empty matrix
         rows = 0;
         cols = 0;
         mat.clear();

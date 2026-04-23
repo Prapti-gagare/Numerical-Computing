@@ -5,28 +5,20 @@
 Matrix LeastSquare::fit(int degree) {
     int n = rows;
     if (n == 0 || degree < 0 || n <= degree) return Matrix();
-    
-    // Create design matrix A: n rows, degree+1 columns
-    Matrix A(n, degree + 1);
+     Matrix A(n, degree + 1);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j <= degree; j++) {
             A.set(i, j, pow(mat[i][0], j));
         }
     }
-    
-    // Create y vector: n x 1
     Matrix Y(n, 1);
     for (int i = 0; i < n; i++) {
         Y.set(i, 0, mat[i][1]);
     }
-    
-    // Normal equations: A^T A x = A^T y
-    Matrix AT = A.transpose();
+        Matrix AT = A.transpose();
     Matrix ATA = AT * A;
     Matrix ATY = AT * Y;
-    
-    // Solve for coefficients: x = (A^T A)^-1 * (A^T y)
-    Matrix coeffs = ATA.inverse() * ATY;
+        Matrix coeffs = ATA.inverse() * ATY;
     
     return coeffs;
 }
