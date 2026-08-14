@@ -1,40 +1,66 @@
-#ifndef NUMERICAL_DIFF_HPP
-#define NUMERICAL_DIFF_HPP
+#ifndef NUMERICAL_DIFFERENTIATION_HPP
+#define NUMERICAL_DIFFERENTIATION_HPP
 
 #include <string>
 #include <vector>
+#include <functional>
 
-using Function = double (*)(double);
-
-struct TestFunction
-{
+// Stores one test function and its exact first derivative.
+class TestFunction {
+private:
     std::string name;
-    Function f;
-    Function exactDerivative;
+    std::function<double(double)> function;
+    std::function<double(double)> exactDerivative;
+
+public:
+    TestFunction(
+        const std::string& name,
+        std::function<double(double)> function,
+        std::function<double(double)> exactDerivative
+    );
+
+    std::string getName() const;
+    double evaluate(double x) const;
+    double exact(double x) const;
 };
 
-// Test functions
-double f1(double x);
-double df1(double x);
+// Abstract base class for all finite-difference methods.
+class DifferenceMethod {
+protected:
+    std::string methodName;
 
-double f2(double x);
-double df2(double x);
+public:
+    DifferenceMethod(const std::string& name);
+    virtual ~DifferenceMethod() = default;
 
-double f3(double x);
-double df3(double x);
+    std::string getName() const;
 
-// Difference formulas
-double forwardDifference(Function f, double x, double h);
-double backwardDifference(Function f, double x, double h);
-double centralDifference(Function f, double x, double h);
+    // Polymorphic function: every method implements its own formula.
+    virtual double derivative(const TestFunction& f, double x, double h) const = 0;
+};
 
-// Error and convergence
-double absoluteError(double approximate, double exact);
-double observedOrder(double error1, double error2);
+// Forward difference:
+// f'(x) ≈ [f(x+h) - f(x)] / h
+class ForwardDifference : public DifferenceMethod {
+public:
+    ForwardDifference();
+    double derivative(const TestFunction& f, double x, double h) const override;
+};
 
-// Experiment
-void runExperiment(const TestFunction& func,
-                   double x,
-                   const std::vector<double>& hValues);
+// Backward difference:
+// f'(x) ≈ [f(x) - f(x-h)] / h
+class BackwardDifference : public DifferenceMethod {
+public:
+    BackwardDifference();
+    double derivative(const TestFunction& f, double x, double h) const override;
+};
+
+// Central difference:
+// f'(x) ≈ [f(x+h) - f(x-h)] / (2h)
+class CentralDifference : public DifferenceMethod {
+public:
+    CentralDifference();
+    double derivative(const TestFunction& f, double x, double h) const override;
+};
 
 #endif
