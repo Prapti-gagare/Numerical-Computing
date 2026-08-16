@@ -2,24 +2,28 @@
 #define NUMERICAL_DIFFERENTIATION_HPP
 
 #include <string>
-#include <vector>
-#include <functional>
+
+using namespace std;
+
+// Plain function-pointer type: no lambdas / std::function needed.
+// Any ordinary double(double) function can be passed directly.
+typedef double (*MathFunction)(double);
 
 // Stores one test function and its exact first derivative.
 class TestFunction {
 private:
-    std::string name;
-    std::function<double(double)> function;
-    std::function<double(double)> exactDerivative;
+    string name;
+    MathFunction function;
+    MathFunction exactDerivative;
 
 public:
     TestFunction(
-        const std::string& name,
-        std::function<double(double)> function,
-        std::function<double(double)> exactDerivative
+        const string& name,
+        MathFunction function,
+        MathFunction exactDerivative
     );
 
-    std::string getName() const;
+    string getName() const;
     double evaluate(double x) const;
     double exact(double x) const;
 };
@@ -27,20 +31,19 @@ public:
 // Abstract base class for all finite-difference methods.
 class DifferenceMethod {
 protected:
-    std::string methodName;
+    string methodName;
 
 public:
-    DifferenceMethod(const std::string& name);
-    virtual ~DifferenceMethod() = default;
+    DifferenceMethod(const string& name);
 
-    std::string getName() const;
+    string getName() const;
 
     // Polymorphic function: every method implements its own formula.
     virtual double derivative(const TestFunction& f, double x, double h) const = 0;
 };
 
 // Forward difference:
-// f'(x) ≈ [f(x+h) - f(x)] / h
+// f'(x) ~ [f(x+h) - f(x)] / h
 class ForwardDifference : public DifferenceMethod {
 public:
     ForwardDifference();
@@ -48,7 +51,7 @@ public:
 };
 
 // Backward difference:
-// f'(x) ≈ [f(x) - f(x-h)] / h
+// f'(x) ~ [f(x) - f(x-h)] / h
 class BackwardDifference : public DifferenceMethod {
 public:
     BackwardDifference();
@@ -56,7 +59,7 @@ public:
 };
 
 // Central difference:
-// f'(x) ≈ [f(x+h) - f(x-h)] / (2h)
+// f'(x) ~ [f(x+h) - f(x-h)] / (2h)
 class CentralDifference : public DifferenceMethod {
 public:
     CentralDifference();

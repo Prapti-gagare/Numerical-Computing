@@ -6,6 +6,7 @@
 #include "numerical_diff.hpp"
 
 using namespace std;
+
 double expFunction(double x)
 {
     return exp(x);
@@ -15,7 +16,6 @@ double expDerivative(double x)
 {
     return exp(x);
 }
-
 
 double sinFunction(double x)
 {
@@ -27,7 +27,6 @@ double sinDerivative(double x)
     return cos(x);
 }
 
-
 double polynomialFunction(double x)
 {
     return x * x * x - 2 * x + 1;
@@ -37,6 +36,7 @@ double polynomialDerivative(double x)
 {
     return 3 * x * x - 2;
 }
+
 int main() {
     const double x = 1.0;
 
@@ -47,24 +47,24 @@ int main() {
 
     // Test functions and their exact first derivatives.
     vector<TestFunction> functions = {
-    TestFunction(
-        "exp(x)",
-        expFunction,
-        expDerivative
-    ),
+        TestFunction(
+            "exp(x)",
+            expFunction,
+            expDerivative
+        ),
 
-    TestFunction(
-        "sin(x)",
-        sinFunction,
-        sinDerivative
-    ),
+        TestFunction(
+            "sin(x)",
+            sinFunction,
+            sinDerivative
+        ),
 
-    TestFunction(
-        "x^3 - 2x + 1",
-        polynomialFunction,
-        polynomialDerivative
-    )
-};
+        TestFunction(
+            "x^3 - 2x + 1",
+            polynomialFunction,
+            polynomialDerivative
+        )
+    };
 
     // OOP: objects of derived classes are accessed through base-class pointers.
     ForwardDifference forward;

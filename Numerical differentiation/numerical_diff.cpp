@@ -1,15 +1,17 @@
 #include "numerical_diff.hpp"
 
+using namespace std;
+
 // ---------------- TestFunction ----------------
 
 TestFunction::TestFunction(
-    const std::string& name,
-    std::function<double(double)> function,
-    std::function<double(double)> exactDerivative
+    const string& name,
+    MathFunction function,
+    MathFunction exactDerivative
 )
     : name(name), function(function), exactDerivative(exactDerivative) {}
 
-std::string TestFunction::getName() const {
+string TestFunction::getName() const {
     return name;
 }
 
@@ -23,10 +25,10 @@ double TestFunction::exact(double x) const {
 
 // ---------------- DifferenceMethod ----------------
 
-DifferenceMethod::DifferenceMethod(const std::string& name)
+DifferenceMethod::DifferenceMethod(const string& name)
     : methodName(name) {}
 
-std::string DifferenceMethod::getName() const {
+string DifferenceMethod::getName() const {
     return methodName;
 }
 
