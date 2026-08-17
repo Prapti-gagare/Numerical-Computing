@@ -2,8 +2,6 @@
 
 using namespace std;
 
-// ---------------- TestFunction ----------------
-
 TestFunction::TestFunction(
     const string& name,
     MathFunction function,
@@ -23,7 +21,7 @@ double TestFunction::exact(double x) const {
     return exactDerivative(x);
 }
 
-// ---------------- DifferenceMethod ----------------
+
 
 DifferenceMethod::DifferenceMethod(const string& name)
     : methodName(name) {}
@@ -32,7 +30,6 @@ string DifferenceMethod::getName() const {
     return methodName;
 }
 
-// ---------------- ForwardDifference ----------------
 
 ForwardDifference::ForwardDifference()
     : DifferenceMethod("Forward") {}
@@ -43,8 +40,6 @@ double ForwardDifference::derivative(
     return (f.evaluate(x + h) - f.evaluate(x)) / h;
 }
 
-// ---------------- BackwardDifference ----------------
-
 BackwardDifference::BackwardDifference()
     : DifferenceMethod("Backward") {}
 
@@ -53,8 +48,6 @@ double BackwardDifference::derivative(
 ) const {
     return (f.evaluate(x) - f.evaluate(x - h)) / h;
 }
-
-// ---------------- CentralDifference ----------------
 
 CentralDifference::CentralDifference()
     : DifferenceMethod("Central") {}

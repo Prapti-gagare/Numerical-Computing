@@ -40,12 +40,10 @@ double polynomialDerivative(double x)
 int main() {
     const double x = 1.0;
 
-    // Six step sizes required by the assignment.
     vector<double> hValues = {
         1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6
     };
 
-    // Test functions and their exact first derivatives.
     vector<TestFunction> functions = {
         TestFunction(
             "exp(x)",
@@ -65,8 +63,6 @@ int main() {
             polynomialDerivative
         )
     };
-
-    // OOP: objects of derived classes are accessed through base-class pointers.
     ForwardDifference forward;
     BackwardDifference backward;
     CentralDifference central;
@@ -75,7 +71,6 @@ int main() {
         &forward, &backward, &central
     };
 
-    // CSV file can be used directly for the log-log plot.
     ofstream csv("results.csv");
 
     if (!csv) {
@@ -128,27 +123,6 @@ int main() {
     csv.close();
 
     cout << "\nResults have been saved to results.csv\n";
-
-    cout << "\nSYMBOLIC RESULT FOR f(x) = x^3 - 2x + 1\n";
-    cout << "f'(x) = 3x^2 - 2\n";
-    cout << "At x = 1: f'(1) = 1\n\n";
-
-    cout << "Forward difference at x=1:\n";
-    cout << "D_f = 1 + 3h + h^2\n";
-    cout << "Absolute error = 3h + h^2\n\n";
-
-    cout << "Backward difference at x=1:\n";
-    cout << "D_b = 1 - 3h + h^2\n";
-    cout << "Absolute error = 3h - h^2  (for the small h values used)\n\n";
-
-    cout << "Central difference at x=1:\n";
-    cout << "D_c = 1 + h^2\n";
-    cout << "Absolute error = h^2\n\n";
-
-    cout << "Expected order of accuracy:\n";
-    cout << "Forward  : O(h)\n";
-    cout << "Backward : O(h)\n";
-    cout << "Central  : O(h^2)\n";
 
     return 0;
 }

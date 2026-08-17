@@ -5,11 +5,8 @@
 
 using namespace std;
 
-// Plain function-pointer type: no lambdas / std::function needed.
-// Any ordinary double(double) function can be passed directly.
 typedef double (*MathFunction)(double);
 
-// Stores one test function and its exact first derivative.
 class TestFunction {
 private:
     string name;
@@ -27,39 +24,25 @@ public:
     double evaluate(double x) const;
     double exact(double x) const;
 };
-
-// Abstract base class for all finite-difference methods.
 class DifferenceMethod {
 protected:
     string methodName;
 
 public:
     DifferenceMethod(const string& name);
-
     string getName() const;
-
-    // Polymorphic function: every method implements its own formula.
     virtual double derivative(const TestFunction& f, double x, double h) const = 0;
 };
-
-// Forward difference:
-// f'(x) ~ [f(x+h) - f(x)] / h
 class ForwardDifference : public DifferenceMethod {
 public:
     ForwardDifference();
     double derivative(const TestFunction& f, double x, double h) const override;
 };
-
-// Backward difference:
-// f'(x) ~ [f(x) - f(x-h)] / h
 class BackwardDifference : public DifferenceMethod {
 public:
     BackwardDifference();
     double derivative(const TestFunction& f, double x, double h) const override;
 };
-
-// Central difference:
-// f'(x) ~ [f(x+h) - f(x-h)] / (2h)
 class CentralDifference : public DifferenceMethod {
 public:
     CentralDifference();
