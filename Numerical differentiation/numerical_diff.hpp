@@ -4,9 +4,7 @@
 #include <string>
 
 using namespace std;
-
 typedef double (*MathFunction)(double);
-
 class TestFunction {
 private:
     string name;
@@ -30,19 +28,26 @@ protected:
 
 public:
     DifferenceMethod(const string& name);
+
     string getName() const;
     virtual double derivative(const TestFunction& f, double x, double h) const = 0;
 };
+
+
 class ForwardDifference : public DifferenceMethod {
 public:
     ForwardDifference();
     double derivative(const TestFunction& f, double x, double h) const override;
 };
+
+
 class BackwardDifference : public DifferenceMethod {
 public:
     BackwardDifference();
     double derivative(const TestFunction& f, double x, double h) const override;
 };
+
+
 class CentralDifference : public DifferenceMethod {
 public:
     CentralDifference();

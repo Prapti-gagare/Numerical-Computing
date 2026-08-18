@@ -8,7 +8,7 @@
 using namespace std;
 
 double expFunction(double x)
-{
+{   
     return exp(x);
 }
 
@@ -37,13 +37,55 @@ double polynomialDerivative(double x)
     return 3 * x * x - 2;
 }
 
+void runMethod(
+    const TestFunction& f,
+    DifferenceMethod& method,
+    double x,
+    double exactValue,
+    const vector<double>& hValues,
+    ofstream& csv
+) {
+    cout << "\nMethod: " << method.getName() << "\n";
+    cout << setw(12) << "h"
+         << setw(20) << "Approximation"
+         << setw(20) << "Absolute Error" << "\n";
+
+    for (double h : hValues) {
+        double approx = method.derivative(f, x, h);
+        double error = fabs(exactValue - approx);
+
+        cout << scientific << setprecision(6)
+             << setw(12) << h
+             << setw(20) << approx
+             << setw(20) << error << "\n";
+
+        csv << f.getName() << ","
+            << method.getName() << ","
+            << scientific << setprecision(12) << h << ","
+            << approx << ","
+            << exactValue << ","
+            << error << "\n";
+    }
+    cout << fixed;
+}
+
 int main() {
     const double x = 1.0;
+    int numH = 0;
+    cout << "Enter the number of step sizes (h values) to test: ";
+    cin >> numH;
 
-    vector<double> hValues = {
-        1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6
-    };
+    while (numH <= 0) {
+        cout << "Please enter a positive integer: ";
+        cin >> numH;
+    }
 
+    vector<double> hValues(numH);
+    for (int i = 0; i < numH; ++i) {
+        cout << "Enter h[" << (i + 1) << "]: ";
+        cin >> hValues[i];
+    }
+    cout << "\n";
     vector<TestFunction> functions = {
         TestFunction(
             "exp(x)",
@@ -63,13 +105,10 @@ int main() {
             polynomialDerivative
         )
     };
+
     ForwardDifference forward;
     BackwardDifference backward;
     CentralDifference central;
-
-    vector<DifferenceMethod*> methods = {
-        &forward, &backward, &central
-    };
 
     ofstream csv("results.csv");
 
@@ -93,30 +132,10 @@ int main() {
         cout << "Exact derivative at x=1: " << exactValue << "\n";
         cout << "============================================================\n";
 
-        for (DifferenceMethod* method : methods) {
-            cout << "\nMethod: " << method->getName() << "\n";
-            cout << setw(12) << "h"
-                 << setw(20) << "Approximation"
-                 << setw(20) << "Absolute Error" << "\n";
+        runMethod(f, forward, x, exactValue, hValues, csv);
+        runMethod(f, backward, x, exactValue, hValues, csv);
+        runMethod(f, central, x, exactValue, hValues, csv);
 
-            for (double h : hValues) {
-                double approx = method->derivative(f, x, h);
-                double error = fabs(exactValue - approx);
-
-                cout << scientific << setprecision(6)
-                     << setw(12) << h
-                     << setw(20) << approx
-                     << setw(20) << error << "\n";
-
-                csv << f.getName() << ","
-                    << method->getName() << ","
-                    << scientific << setprecision(12) << h << ","
-                    << approx << ","
-                    << exactValue << ","
-                    << error << "\n";
-            }
-            cout << fixed;
-        }
         cout << "\n";
     }
 
