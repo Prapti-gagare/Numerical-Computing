@@ -2,8 +2,6 @@
 
 using namespace std;
 
-// ---------------- TestFunction ----------------
-
 TestFunction::TestFunction(
     const string& name,
     MathFunction function,
