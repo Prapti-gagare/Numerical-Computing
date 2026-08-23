@@ -5,27 +5,31 @@ using namespace std;
 TestFunction::TestFunction(
     const string& name,
     MathFunction function,
-    MathFunction exactDerivative): name(name), function(function), exactDerivative(exactDerivative) {}
+    MathFunction exactDerivative
+) {
+    this->name = name;
+    this->function = function;
+    this->exactDerivative = exactDerivative;
+}
 
 string TestFunction::getName() const {
-    return name;
+    return this->name;
 }
 
 double TestFunction::evaluate(double x) const {
-    return function(x);
+    return this->function(x);
 }
 
 double TestFunction::exact(double x) const {
-    return exactDerivative(x);
+    return this->exactDerivative(x);
 }
 
-// ---------------- DifferenceMethod ----------------
-
-DifferenceMethod::DifferenceMethod(const string& name)
-    : methodName(name) {}
+DifferenceMethod::DifferenceMethod(const string& name) {
+    this->methodName = name;
+}
 
 string DifferenceMethod::getName() const {
-    return methodName;
+    return this->methodName;
 }
 
 // ---------------- ForwardDifference ----------------

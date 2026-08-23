@@ -113,15 +113,11 @@ int main() {
     ofstream csv("results.csv");
 
     if (!csv) {
-        cerr << "Error: Could not create results.csv\n";
+        cout << "Error: Could not create results.csv\n";
         return 1;
     }
 
-    csv << "Function,Method,h,Approximation,Exact,AbsoluteError\n";
-
     cout << fixed << setprecision(10);
-
-    cout << "NUMERICAL DIFFERENTIATION USING OOP\n";
     cout << "Evaluation point x = " << x << "\n\n";
 
     for (const TestFunction& f : functions) {
