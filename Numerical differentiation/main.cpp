@@ -18,7 +18,7 @@ double expDerivative(double x)
 }
 
 double sinFunction(double x)
-{
+{    
     return sin(x);
 }
 
