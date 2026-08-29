@@ -35,32 +35,10 @@ public:
     complex(float r, float i);
 };
 
-// ============================================================================
-// Arithmetic Operations
-// ============================================================================
-
-/**
- * @brief Add two complex numbers.
- * @param a First complex number
- * @param b Second complex number
- * @return The sum (a + b)
- */
 complex add(const complex& a, const complex& b);
 
-/**
- * @brief Subtract two complex numbers.
- * @param a First complex number
- * @param b Second complex number
- * @return The difference (a - b)
- */
 complex subtract(const complex& a, const complex& b);
 
-/**
- * @brief Multiply two complex numbers.
- * @param a First complex number
- * @param b Second complex number
- * @return The product (a * b)
- */
 complex multiply(const complex& a, const complex& b);
 
 /**

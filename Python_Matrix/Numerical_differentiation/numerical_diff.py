@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-
 class TestFunction:
     def __init__(self, name, function, exact_derivative):
         self.name = name
