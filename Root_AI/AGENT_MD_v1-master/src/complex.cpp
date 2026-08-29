@@ -3,45 +3,13 @@
 #include <limits>
 #include <cmath>
 
-// ============================================================================
-// Constructor Implementations
-// ============================================================================
-
-/**
- * @brief Default constructor.
- * Initializes a complex number to 0 + 0i.
- */
 complex::complex() : real(0.0f), imag(0.0f) {}
-
-/**
- * @brief Parameterized constructor.
- * Initializes a complex number with the given real and imaginary parts.
- *
- * @param r The real part
- * @param i The imaginary part
- */
 complex::complex(float r, float i) : real(r), imag(i) {}
 
-// ============================================================================
-// Arithmetic Operations
-// ============================================================================
-
-/**
- * @brief Add two complex numbers.
- * @param a First complex number
- * @param b Second complex number
- * @return The sum (a + b)
- */
 complex add(const complex& a, const complex& b) {
     return complex(a.real + b.real, a.imag + b.imag);
 }
 
-/**
- * @brief Subtract two complex numbers.
- * @param a First complex number
- * @param b Second complex number
- * @return The difference (a - b)
- */
 complex subtract(const complex& a, const complex& b) {
     return complex(a.real - b.real, a.imag - b.imag);
 }
