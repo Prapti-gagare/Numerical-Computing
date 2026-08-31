@@ -7,51 +7,38 @@ from backward_difference import BackwardDifference
 from central_difference import CentralDifference
 from richardson import RichardsonExtrapolation
 
-
 def exp_function(x):
     return math.exp(x)
-
 
 def exp_derivative(x):
     return math.exp(x)
 
-
 def sin_function(x):
     return math.sin(x)
-
 
 def sin_derivative(x):
     return math.cos(x)
 
-
 def poly_function(x):
     return x**3 - 2 * x + 1
-
 
 def poly_derivative(x):
     return 3 * x**2 - 2
 
-
 def cos_function(x):
     return math.cos(x)
-
 
 def cos_derivative(x):
     return -math.sin(x)
 
-
 def run_method(f, method, x, exact_value, h_values, writer):
-
     print(f"\nMethod: {method.get_name()}")
     print(f"{'h':>12}{'Approximation':>20}{'Error':>20}")
 
     for h in h_values:
-
         approx = method.derivative(f, x, h)
         error = abs(exact_value - approx)
-
         print(f"{h:>12.6e}{approx:>20.6e}{error:>20.6e}")
-
         writer.writerow([
             f.get_name(),
             method.get_name(),
@@ -63,9 +50,8 @@ def run_method(f, method, x, exact_value, h_values, writer):
 
 
 def main():
-
+    
     x = 1.0
-
     n = int(input("Enter the number of step sizes (h values) to test: "))
 
     h_values = [
