@@ -1,4 +1,4 @@
-from central_difference import CentralDifference
+from src.central_difference import CentralDifference
 
 
 class RichardsonExtrapolation:

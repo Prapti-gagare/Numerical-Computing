@@ -1,11 +1,20 @@
 import math
 import csv
+import sys
+import os
 
-from test_func import TestFunction
-from forward_difference import ForwardDifference
-from backward_difference import BackwardDifference
-from central_difference import CentralDifference
-from richardson import RichardsonExtrapolation
+# Ensure both this script's folder and its parent are on the path,
+# so 'src' is found whether it sits next to main.py or one level up
+# (e.g. main.py inside a 'main' subfolder, src/ as a sibling of that).
+_this_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _this_dir)
+sys.path.insert(0, os.path.dirname(_this_dir))
+
+from src.test_func import TestFunction
+from src.forward_difference import ForwardDifference
+from src.backward_difference import BackwardDifference
+from src.central_difference import CentralDifference
+from src.richardson import RichardsonExtrapolation
 
 def exp_function(x):
     return math.exp(x)
