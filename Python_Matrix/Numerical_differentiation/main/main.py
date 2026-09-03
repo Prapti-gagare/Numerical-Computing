@@ -15,6 +15,7 @@ from src.forward_difference import ForwardDifference
 from src.backward_difference import BackwardDifference
 from src.central_difference import CentralDifference
 from src.richardson import RichardsonExtrapolation
+from src.lagrange import LagrangeInterpolation
 
 def exp_function(x):
     return math.exp(x)
@@ -79,7 +80,8 @@ def main():
         ForwardDifference(),
         BackwardDifference(),
         CentralDifference(),
-        RichardsonExtrapolation()
+        RichardsonExtrapolation(),
+        LagrangeInterpolation()
     ]
 
     with open("results.csv", "w", newline="") as csv_file:
