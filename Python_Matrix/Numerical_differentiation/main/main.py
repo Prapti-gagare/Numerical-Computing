@@ -16,6 +16,7 @@ from src.backward_difference import BackwardDifference
 from src.central_difference import CentralDifference
 from src.richardson import RichardsonExtrapolation
 from src.lagrange import LagrangeInterpolation
+from src.newton import NewtonInterpolation
 
 def exp_function(x):
     return math.exp(x)
@@ -81,7 +82,8 @@ def main():
         BackwardDifference(),
         CentralDifference(),
         RichardsonExtrapolation(),
-        LagrangeInterpolation()
+        LagrangeInterpolation(),
+        NewtonInterpolation()
     ]
 
     with open("results.csv", "w", newline="") as csv_file:
