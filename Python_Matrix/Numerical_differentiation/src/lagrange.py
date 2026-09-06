@@ -1,15 +1,12 @@
-class LagrangeInterpolation:
+from src.base import Interpolation
 
+
+class LagrangeInterpolation(Interpolation):
     def __init__(self, offsets=(-2, -1, 0, 1, 2)):
-        self.offsets = offsets
-        self.name = f"Lagrange ({len(offsets)}-point)"
-
-    def get_name(self):
-        return self.name
+        super().__init__(f"Lagrange ({len(offsets)}-point)", offsets)
 
     def derivative(self, f, x, h):
-        nodes = [x + o * h for o in self.offsets]
-        values = [f.evaluate(xi) for xi in nodes]
+        nodes, values = self.build_nodes(f, x, h)
 
         n = len(nodes)
         result = 0.0

@@ -1,14 +1,12 @@
-class NewtonInterpolation:
-    def __init__(self, offsets=(-2, -1, 0, 1, 2)):
-        self.offsets = offsets
-        self.name = f"Newton ({len(offsets)}-point)"
+from src.base import Interpolation
 
-    def get_name(self):
-        return self.name
+
+class NewtonInterpolation(Interpolation):
+    def __init__(self, offsets=(-2, -1, 0, 1, 2)):
+        super().__init__(f"Newton ({len(offsets)}-point)", offsets)
 
     def derivative(self, f, x, h):
-        nodes = [x + o * h for o in self.offsets]
-        values = [f.evaluate(xi) for xi in nodes]
+        nodes, values = self.build_nodes(f, x, h)
 
         coeffs = self._divided_differences(nodes, values)
 

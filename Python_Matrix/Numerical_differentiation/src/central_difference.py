@@ -1,9 +1,9 @@
-class CentralDifference:
-    def __init__(self):
-        self.name = "Central"
+from src.base import DividedDifference
 
-    def get_name(self):
-        return self.name
+
+class CentralDifference(DividedDifference):
+    def __init__(self):
+        super().__init__("Central")
 
     def derivative(self, f, x, h):
         return (f.evaluate(x + h) - f.evaluate(x - h)) / (2 * h)

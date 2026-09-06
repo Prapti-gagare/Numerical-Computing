@@ -1,9 +1,9 @@
-class ForwardDifference:
-    def __init__(self):
-        self.name = "Forward"
+from src.base import DividedDifference
 
-    def get_name(self):
-        return self.name
+
+class ForwardDifference(DividedDifference):
+    def __init__(self):
+        super().__init__("Forward")
 
     def derivative(self, f, x, h):
         return (f.evaluate(x + h) - f.evaluate(x)) / h

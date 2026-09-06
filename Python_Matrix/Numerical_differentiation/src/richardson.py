@@ -1,13 +1,11 @@
+from src.base import DividedDifference
 from src.central_difference import CentralDifference
 
 
-class RichardsonExtrapolation:
+class RichardsonExtrapolation(DividedDifference):
     def __init__(self):
-        self.name = "Richardson"
+        super().__init__("Richardson")
         self.central = CentralDifference()
-
-    def get_name(self):
-        return self.name
 
     def derivative(self, f, x, h):
         d_h = self.central.derivative(f, x, h)
