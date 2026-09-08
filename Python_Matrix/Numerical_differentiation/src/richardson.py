@@ -12,3 +12,4 @@ class RichardsonExtrapolation(DividedDifference):
         d_h2 = self.central.derivative(f, x, h / 2)
 
         return (4 * d_h2 - d_h) / 3
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
