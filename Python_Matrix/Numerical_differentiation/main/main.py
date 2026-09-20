@@ -17,6 +17,7 @@ from src.central_difference import CentralDifference
 from src.richardson import RichardsonExtrapolation
 from src.lagrange import LagrangeInterpolation
 from src.newton import NewtonInterpolation
+from src.trapezoidal import TrapezoidalRule
 
 def exp_function(x):
     return math.exp(x)
@@ -42,6 +43,12 @@ def cos_function(x):
 def cos_derivative(x):
     return -math.sin(x)
 
+def square_function(x):
+    return x ** 2
+
+def square_antiderivative(x):
+    return x ** 3 / 3
+
 def run_method(f, method, x, exact_value, h_values, writer):
     print(f"\nMethod: {method.get_name()}")
     print(f"{'h':>12}{'Approximation':>20}{'Error':>20}")
@@ -60,8 +67,7 @@ def run_method(f, method, x, exact_value, h_values, writer):
         ])
 
 
-def main():
-    
+def run_differentiation():
     x = 1.0
     n = int(input("Enter the number of step sizes (h values) to test: "))
 
@@ -119,6 +125,49 @@ def main():
                 )
 
     print("\nResults have been saved to results.csv")
+
+
+def run_integration():
+    # Assignment: I = integral of x^2 dx  (limits default to 0 and 1)
+    a = float(input("Lower limit a [default 0]: ") or 0)
+    b = float(input("Upper limit b [default 1]: ") or 1)
+    n_values = [1, 2, 4, 8, 16]
+
+    f = TestFunction("x^2", square_function, None, square_antiderivative)
+    method = TrapezoidalRule()
+    exact_value = f.exact_integral(a, b)
+
+    print(f"\nIntegral of {f.get_name()} from {a} to {b}")
+    print(f"Exact value = {exact_value:.10f}")
+    print(f"\nMethod: {method.get_name()}")
+    print(f"{'n':>4}{'h':>12}{'Approximation':>20}{'Absolute Error':>20}")
+
+    with open("trapezoidal_results.csv", "w", newline="") as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(["Function", "Method", "n", "h", "Approximation", "Exact", "Error"])
+
+        for n in n_values:
+            h = method.step_size(a, b, n)
+            approx = method.integrate(f, a, b, n)
+            error = abs(exact_value - approx)
+            print(f"{n:>4}{h:>12.6f}{approx:>20.10f}{error:>20.10e}")
+            writer.writerow([f.get_name(), method.get_name(), n, h, approx, exact_value, error])
+
+    print("\nResults have been saved to trapezoidal_results.csv")
+
+
+def main():
+    print("1) Numerical differentiation")
+    print("2) Trapezoidal rule integration")
+    print("3) Both")
+    choice = input("Choose an option [1/2/3]: ").strip()
+
+    if choice in ("1", "3"):
+        run_differentiation()
+    if choice in ("2", "3"):
+        run_integration()
+    if choice not in ("1", "2", "3"):
+        print("Invalid choice.")
 
 
 if __name__ == "__main__":
