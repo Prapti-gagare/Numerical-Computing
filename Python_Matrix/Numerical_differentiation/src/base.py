@@ -24,3 +24,15 @@ class Interpolation(DifferentiationMethod):
         nodes = [x + o * h for o in self.offsets]
         values = [f.evaluate(xi) for xi in nodes]
         return nodes, values
+
+
+class IntegrationMethod:
+
+    def __init__(self, name):
+        self.name = name
+
+    def get_name(self):
+        return self.name
+
+    def integrate(self, f, a, b, n):
+        raise NotImplementedError("Subclasses must implement integrate()")
