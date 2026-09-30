@@ -18,6 +18,8 @@ from src.richardson import RichardsonExtrapolation
 from src.lagrange import LagrangeInterpolation
 from src.newton import NewtonInterpolation
 from src.trapezoidal import TrapezoidalRule
+from src.simpsons1_3 import Simpson13Rule
+from src.simpsons_3_8 import Simpson38Rule
 
 def exp_function(x):
     return math.exp(x)
@@ -48,6 +50,9 @@ def square_function(x):
 
 def square_antiderivative(x):
     return x ** 3 / 3
+
+def exp_antiderivative(x):
+    return math.exp(x)
 
 def run_method(f, method, x, exact_value, h_values, writer):
     print(f"\nMethod: {method.get_name()}")
@@ -128,37 +133,45 @@ def run_differentiation():
 
 
 def run_integration():
-    # Assignment: I = integral of x^2 dx  (limits default to 0 and 1)
     a = float(input("Lower limit a [default 0]: ") or 0)
     b = float(input("Upper limit b [default 1]: ") or 1)
-    n_values = [1, 2, 4, 8, 16]
 
-    f = TestFunction("x^2", square_function, None, square_antiderivative)
-    method = TrapezoidalRule()
+    f = TestFunction("e^x", exp_function, None, exp_antiderivative)
     exact_value = f.exact_integral(a, b)
+
+    methods = [
+        (TrapezoidalRule(), [1, 2, 4, 8, 16]),
+        (Simpson13Rule(), [2, 4, 6, 8, 10, 12, 16]),
+        (Simpson38Rule(), [3, 6, 9, 12, 15, 18])
+    ]
 
     print(f"\nIntegral of {f.get_name()} from {a} to {b}")
     print(f"Exact value = {exact_value:.10f}")
-    print(f"\nMethod: {method.get_name()}")
-    print(f"{'n':>4}{'h':>12}{'Approximation':>20}{'Absolute Error':>20}")
 
-    with open("trapezoidal_results.csv", "w", newline="") as csv_file:
+    with open("integration_results.csv", "w", newline="") as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["Function", "Method", "n", "h", "Approximation", "Exact", "Error"])
 
-        for n in n_values:
-            h = method.step_size(a, b, n)
-            approx = method.integrate(f, a, b, n)
-            error = abs(exact_value - approx)
-            print(f"{n:>4}{h:>12.6f}{approx:>20.10f}{error:>20.10e}")
-            writer.writerow([f.get_name(), method.get_name(), n, h, approx, exact_value, error])
+        for method, n_values in methods:
+            print(f"\nMethod: {method.get_name()}")
+            print(f"{'n':>4}{'h':>12}{'Approximation':>20}{'Absolute Error':>20}")
 
-    print("\nResults have been saved to trapezoidal_results.csv")
+            for n in n_values:
+                try:
+                    h = method.step_size(a, b, n)
+                    approx = method.integrate(f, a, b, n)
+                    error = abs(exact_value - approx)
+                    print(f"{n:>4}{h:>12.6f}{approx:>20.10f}{error:>20.10e}")
+                    writer.writerow([f.get_name(), method.get_name(), n, h, approx, exact_value, error])
+                except ValueError:
+                    continue
+
+    print("\nResults have been saved to integration_results.csv")
 
 
 def main():
     print("1) Numerical differentiation")
-    print("2) Trapezoidal rule integration")
+    print("2) Numerical integration")
     print("3) Both")
     choice = input("Choose an option [1/2/3]: ").strip()
 
