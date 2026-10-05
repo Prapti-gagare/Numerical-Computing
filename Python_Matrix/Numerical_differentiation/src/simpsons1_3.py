@@ -1,6 +1,5 @@
 from src.base import IntegrationMethod
 
-
 class Simpson13Rule(IntegrationMethod):
     def __init__(self):
         super().__init__("Simpson's 1/3 Rule")

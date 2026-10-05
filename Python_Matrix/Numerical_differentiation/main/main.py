@@ -141,7 +141,7 @@ def run_integration():
 
     methods = [
         (TrapezoidalRule(), [1, 2, 4, 8, 16]),
-        (Simpson13Rule(), [2, 4, 6, 8, 10, 12, 16]),
+        (Simpson13Rule(), [128,256,384,512,640]),
         (Simpson38Rule(), [3, 6, 9, 12, 15, 18])
     ]
 
