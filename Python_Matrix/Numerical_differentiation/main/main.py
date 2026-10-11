@@ -20,6 +20,7 @@ from src.newton import NewtonInterpolation
 from src.trapezoidal import TrapezoidalRule
 from src.simpsons1_3 import Simpson13Rule
 from src.simpsons_3_8 import Simpson38Rule
+from src.power_method import PowerMethod
 
 def exp_function(x):
     return math.exp(x)
@@ -169,17 +170,73 @@ def run_integration():
     print("\nResults have been saved to integration_results.csv")
 
 
+def find_input_file(filename):
+    """Look for an input file in the current folder, next to main.py, then the project root."""
+    for folder in (os.getcwd(), _this_dir, os.path.dirname(_this_dir)):
+        path = os.path.join(folder, filename)
+        if os.path.isfile(path):
+            return path
+    raise FileNotFoundError(f"Could not find {filename}")
+
+
+def run_eigen():
+    file_A = input("Matrix file [default inputA.txt]: ").strip() or "inputA.txt"
+    tol = float(input("Tolerance [default 1e-8]: ") or 1e-8)
+    max_it = int(input("Max iterations [default 5000]: ") or 5000)
+
+    solver = PowerMethod(max_iterations=max_it, tolerance=tol)
+    solver.load_matrix(find_input_file(file_A))
+
+    print(f"\nA : {solver.rows} x {solver.cols}")
+
+    eigenvalue, eigenvector = solver.run()
+
+    print("\n" + "=" * 50)
+    print("Power Method - dominant eigenpair of A")
+    print("=" * 50)
+    print(f"Converged  : {solver.converged}")
+    print(f"Iterations : {solver.iterations}")
+    print(f"Eigenvalue : {eigenvalue:.10f}")
+    print(f"Residual ||Av - lambda v|| : {solver.residual:.3e}")
+    print("Eigenvector (unit norm), first 10 components:")
+    for i, x in enumerate(eigenvector[:10], start=1):
+        print(f"  v[{i:>2}] = {x: .10f}")
+    if len(eigenvector) > 10:
+        print(f"  ... ({len(eigenvector) - 10} more in the results file)")
+
+    show_raw = input("\nShow the unscaled iteration vectors v_k = A*v_(k-1)? [y/N]: ").strip().lower()
+    if show_raw == "y":
+        raw = solver.get_raw_vectors()
+        shown = raw if len(raw) <= 12 else raw[:6] + [None] + raw[-5:]
+        print("\nUnscaled vectors (first 10 components of each):")
+        for item in shown:
+            if item is None:
+                print("   ...")
+                continue
+            k = raw.index(item)
+            print(f"  k={k:<3} (" + ", ".join(f"{x:.10g}" for x in item[:10]) + ")")
+        solver.save_iterations_to_file("power_method_iterations.txt")
+        print("Full unscaled vectors saved to power_method_iterations.txt")
+
+    out = "power_method_results.txt"
+    solver.save_results_to_file(out, eigenvalue, eigenvector)
+    print(f"\nResults have been saved to {out}")
+
+
 def main():
     print("1) Numerical differentiation")
     print("2) Numerical integration")
     print("3) Both")
-    choice = input("Choose an option [1/2/3]: ").strip()
+    print("4) Eigenvalue & eigenvector (Power method)")
+    choice = input("Choose an option [1/2/3/4]: ").strip()
 
     if choice in ("1", "3"):
         run_differentiation()
     if choice in ("2", "3"):
         run_integration()
-    if choice not in ("1", "2", "3"):
+    if choice == "4":
+        run_eigen()
+    if choice not in ("1", "2", "3", "4"):
         print("Invalid choice.")
 
 
