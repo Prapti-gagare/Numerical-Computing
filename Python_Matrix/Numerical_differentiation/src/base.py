@@ -39,14 +39,6 @@ class IntegrationMethod:
 
 
 class Matrix:
-    """Base class for matrix problems read from a single text file.
-
-    File format (e.g. inputA.txt):
-        rows cols
-        a11 a12 ... a1n
-        ...
-    Values may be split over lines in any way; they are read in row-major order.
-    """
 
     def __init__(self, name):
         self.name = name

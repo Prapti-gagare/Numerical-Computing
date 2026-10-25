@@ -4,11 +4,6 @@ from src.base import Matrix
 
 
 class PowerMethod(Matrix):
-    """Dominant eigenvalue / eigenvector of A via the power method.
-
-    A is read from a single text file (e.g. inputA.txt).
-    """
-
     def __init__(self, name="Power Method", max_iterations=5000, tolerance=1e-8):
         super().__init__(name)
         self.max_iterations = max_iterations
