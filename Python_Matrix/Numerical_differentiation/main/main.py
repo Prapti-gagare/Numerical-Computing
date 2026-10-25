@@ -21,6 +21,7 @@ from src.trapezoidal import TrapezoidalRule
 from src.simpsons1_3 import Simpson13Rule
 from src.simpsons_3_8 import Simpson38Rule
 from src.power_method import PowerMethod
+from src.jacobi_method import JacobiMethod
 
 def exp_function(x):
     return math.exp(x)
@@ -182,7 +183,6 @@ def find_input_file(filename):
 def run_eigen():
     file_A = input("Matrix file [default inputA.txt]: ").strip() or "inputA.txt"
     tol = float(input("Tolerance [default 1e-8]: ") or 1e-8)
-    max_it = int(input("Max iterations [default 5000]: ") or 5000)
 
     solver = PowerMethod(max_iterations=max_it, tolerance=tol)
     solver.load_matrix(find_input_file(file_A))
@@ -223,12 +223,36 @@ def run_eigen():
     print(f"\nResults have been saved to {out}")
 
 
+def run_jacobi():
+    file_A = input("Matrix file [default inputA.txt]: ").strip() or "inputA.txt"
+    tol = float(input("Tolerance [default 1e-8]: ") or 1e-8)
+    solver = JacobiMethod(tolerance=tol)
+    solver.load_matrix(find_input_file(file_A))
+    eigenvalues, eigenvectors = solver.run()
+    print("\nJacobi Rotation Method")
+    print("Converged:", solver.converged)
+    print("Iterations:", solver.iterations)
+    print("Eigenvalues:")
+    for i, value in enumerate(eigenvalues, 1):
+        print(f"  lambda[{i}] = {value:.10f}")
+    print("Eigenvectors (one vector per row):")
+    for i, vector in enumerate(eigenvectors, 1):
+        print(f"  v[{i}] = {vector}")
+    out = "jacobi_method_results.txt"
+    with open(out, "w") as f:
+        f.write(f"Converged: {solver.converged}\nIterations: {solver.iterations}\n")
+        for i, (value, vector) in enumerate(zip(eigenvalues, eigenvectors), 1):
+            f.write(f"lambda[{i}] = {value:.12g}\nv[{i}] = {vector}\n")
+    print(f"Results saved to {out}")
+
+
 def main():
     print("1) Numerical differentiation")
     print("2) Numerical integration")
     print("3) Both")
     print("4) Eigenvalue & eigenvector (Power method)")
-    choice = input("Choose an option [1/2/3/4]: ").strip()
+    print("5) Eigenvalues & eigenvectors (Jacobi rotation)")
+    choice = input("Choose an option [1/2/3/4/5]: ").strip()
 
     if choice in ("1", "3"):
         run_differentiation()
@@ -236,7 +260,9 @@ def main():
         run_integration()
     if choice == "4":
         run_eigen()
-    if choice not in ("1", "2", "3", "4"):
+    if choice == "5":
+        run_jacobi()
+    if choice not in ("1", "2", "3", "4", "5"):
         print("Invalid choice.")
 
 
